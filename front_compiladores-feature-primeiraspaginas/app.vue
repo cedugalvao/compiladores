@@ -36,9 +36,7 @@
           </div>
           <div class="tw-bg-gray-50 tw-border tw-border-gray-400 tw-rounded-md">
             <div class="tw-p-4">
-              Minim ullamco mollit fugiat occaecat cillum nostrud excepteur
-              velit sit sit. Anim qui sint quis ad fugiat. Proident cupidatat
-              laborum amet qui enim est nisi ex occaecat ea irure cupidatat.
+             resposta
             </div>
           </div>
         </div>
@@ -51,9 +49,7 @@
           </div>
           <div class="tw-bg-gray-50 tw-border tw-border-gray-400 tw-rounded-md">
             <div class="tw-p-4">
-              Minim ullamco mollit fugiat occaecat cillum nostrud excepteur
-              velit sit sit. Anim qui sint quis ad fugiat. Proident cupidatat
-              laborum amet qui enim est nisi ex occaecat ea irure cupidatat.
+              resposta
             </div>
           </div>
         </div>
