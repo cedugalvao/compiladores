@@ -248,7 +248,8 @@ def vezes():
     if idx not in possibilities[idx]:
         possibilities[idx] = set()
     possibilities[idx].union(make_tokens(["1", "2", "3", "4", "5"]))
-    return token in {"1", "2", "3", "4", "5"}
+    return token in {"1", "2", "3", "4", "5"}:
+
 
 
 def fases_EPIC():
