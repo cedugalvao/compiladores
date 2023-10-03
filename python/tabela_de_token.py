@@ -288,7 +288,7 @@ def main(code):
     global idx
     idx = 0
     if not lexan(code):
-        return {'lexer': False, 'parser': False}
+        return {'lexer': False, 'parser': False, 'error': error_message}
     elif programa_SOL():
         return {'lexer': True, 'parser': True}
     else:
