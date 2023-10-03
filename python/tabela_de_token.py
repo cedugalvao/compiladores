@@ -72,26 +72,25 @@ token_table = {
     'executar_o_Chrome_no_computador': TOKEN_EXECUTAR_CHROME
 }
 idx = 0
-token_list = "null"*40
 
 
 def lexan(code):
     global token_list
 
-    token_list = code.split()
+    token_list = code.split(' ')
     for idx, palavra in enumerate(token_list, start=1):
         token_type = token_table.get(palavra, 'TOKEN_DESCONHECIDO')
         if token_type == 'TOKEN_DESCONHECIDO':
             return False
     return True
 
+
 def whatsapp_wb():
     global idx
     flag = browser()
     if idx >= len(token_list):
-        return False    
+        return False
     token = token_list[idx]
-    
     idx += 1
     return flag and token == "link_whatsapp_web"
 
@@ -264,7 +263,6 @@ def sequencia():
     global idx
     last_idx = idx
     if fases_EPIC():
-        print("a")
         return True
     idx = last_idx
     if fases_EPIC() and sequencia():
@@ -280,20 +278,16 @@ def programa_SOL():
     token = token_list[idx]
     idx += 1
     if token == "loop":
-        print(idx, token_list)
         return vezes() and sequencia()
     return False
 
 
 def main(code):
     global idx
-    idx = 0
+
     if not lexan(code):
-        print("Nao difernet")
-        return lexan(code)
+        return {'lexer': False, 'parser': False}
     elif programa_SOL():
-        print("SIM")
-        return "lexer e parser okPASSOU"
+        return {'lexer': True, 'parser': True}
     else:
-        print("NO")
-        return "NÂO"
+        return {'lexer': True, 'parser': False}
