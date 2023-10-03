@@ -73,6 +73,14 @@ token_table = {
 }
 idx = 0
 error_message = ''
+possibilities = dict()
+
+
+def make_tokens(ls):
+    ret = set()
+    for a in ls:
+        ret.add(token_table[a])
+    return ret
 
 
 def lexan(code):
@@ -144,6 +152,9 @@ def browser():
         return False
     token = token_list[idx]
     idx += 1
+    if idx not in possibilities[idx]:
+        possibilities[idx] = set()
+    possibilities[idx].union(make_tokens(["navegador"]))
     return token == "navegador"
 
 
@@ -234,6 +245,9 @@ def vezes():
         return False
     token = token_list[idx]
     idx += 1
+    if idx not in possibilities[idx]:
+        possibilities[idx] = set()
+    possibilities[idx].union(make_tokens(["1", "2", "3", "4", "5"]))
     return token in {"1", "2", "3", "4", "5"}
 
 
