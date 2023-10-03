@@ -285,7 +285,9 @@ def programa_SOL():
 
 
 def main(code):
+    global error_message
     global idx
+    error_message = ""
     idx = 0
     if not lexan(code):
         return {'lexer': False, 'parser': False, 'error': error_message}
