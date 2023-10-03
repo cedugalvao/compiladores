@@ -14,10 +14,9 @@ def analyze_code():
     result = main(code)
 
     # Responder com a resposta da análise
-    response_data = {
-        'message': result
-    }
+    response_data = result
     return jsonify(response_data)
+
 
 if __name__ == '__main__':
     app.run()
