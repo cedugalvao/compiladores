@@ -72,15 +72,18 @@ token_table = {
     'executar_o_Chrome_no_computador': TOKEN_EXECUTAR_CHROME
 }
 idx = 0
+error_message = ''
 
 
 def lexan(code):
     global token_list
+    global error_message
 
     token_list = code.split(' ')
     for idx, palavra in enumerate(token_list, start=1):
         token_type = token_table.get(palavra, 'TOKEN_DESCONHECIDO')
         if token_type == 'TOKEN_DESCONHECIDO':
+            error_message += f"'{palavra}' token invalido"
             return False
     return True
 
@@ -141,7 +144,6 @@ def browser():
         return False
     token = token_list[idx]
     idx += 1
-    print("bababbaa", token)
     return token == "navegador"
 
 
@@ -284,7 +286,7 @@ def programa_SOL():
 
 def main(code):
     global idx
-
+    idx = 0
     if not lexan(code):
         return {'lexer': False, 'parser': False}
     elif programa_SOL():
