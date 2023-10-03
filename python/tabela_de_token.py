@@ -91,7 +91,7 @@ def lexan(code):
     for idx, palavra in enumerate(token_list, start=1):
         token_type = token_table.get(palavra, 'TOKEN_DESCONHECIDO')
         if token_type == 'TOKEN_DESCONHECIDO':
-            error_message += f"'{palavra}' token invalido"
+            error_message += f"Erro na análise léxica: '{palavra}' é um token inválido\n"
             return False
     return True
 
@@ -309,4 +309,5 @@ def main(code):
     elif programa_SOL():
         return {'lexer': True, 'parser': True}
     else:
-        return {'lexer': True, 'parser': False}
+        error_message += "Erro na análise sintática: estrutura inválida"
+        return {'lexer': True, 'parser': False, 'error': error_message}
