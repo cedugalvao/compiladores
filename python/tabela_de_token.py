@@ -82,58 +82,60 @@ def lexan(code):
     for idx, palavra in enumerate(token_list, start=1):
         token_type = token_table.get(palavra, 'TOKEN_DESCONHECIDO')
         if token_type == 'TOKEN_DESCONHECIDO':
-            return False
-    return True
+            error_message = f"'{palavra}' token inválido"
+            return {'lexer': False, 'parser': False, 'error': error_message}
+    return {'lexer': True, 'parser': True}
 
 def whatsapp_wb():
     global idx
     flag = browser()
     if idx >= len(token_list):
-        return False    
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
-    
     idx += 1
-    return flag and token == "link_whatsapp_web"
+    return {'lexer': True, 'parser': flag and token == "link_whatsapp_web"}
+
+
 
 
 def videoconferencia():
     global idx
     flag = browser()
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
     idx += 1
-    return flag and token == "link_videoconferencia"
+    return {'lexer': True, 'parser': flag and token == "link_videoconferencia"}
 
 
 def visualizar_video():
     global idx
     flag = browser()
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
     idx += 1
-    return flag and token == "link_video"
+    return {'lexer': True, 'parser': flag and token == "link_video"}
 
 
 def visualizar_pdf():
     global idx
     flag = browser()
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
     idx += 1
-    return flag and token == "link_pdf"
+    return {'lexer': True, 'parser': flag and token == "link_pdf"}
 
 
 def email():
     global idx
     flag = browser()
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
     idx += 1
-    return flag and token == "link_email"
+    return {'lexer': True, 'parser': flag and token == "link_email"}
 
 
 def browser():
@@ -153,41 +155,50 @@ def navegar():
 def tempo():
     global idx
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
     print(idx)
     idx += 1
-    return token_table[token] == TOKEN_TEMPO_VAL
+    return {'lexer': True, 'parser': token_table.get(token) == TOKEN_TEMPO_VAL}
 
 
 def Explore():
     global idx
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     last_idx = idx
-    if navegar() and tempo():
-        return True
+    nav_result = navegar()
+    temp_result = tempo()
+    if nav_result['parser'] and temp_result['parser']:
+        return {'lexer': nav_result['lexer'] and temp_result['lexer'], 'parser': True}
     idx = last_idx
-    return False
+    return {'lexer': nav_result['lexer'] and temp_result['lexer'], 'parser': False, 'error': 'Erro na análise de Explore'}
+
 
 
 def Present():
     global idx
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     last_idx = idx
-    if visualizar_pdf() and tempo():
-        return True
+    pdf_result = visualizar_pdf()
+    temp_result = tempo()
+    if pdf_result['parser'] and temp_result['parser']:
+        return {'lexer': pdf_result['lexer'] and temp_result['lexer'], 'parser': True}
     idx = last_idx
 
-    if visualizar_video() and tempo():
-        return True
+    video_result = visualizar_video()
+    temp_result = tempo()
+    if video_result['parser'] and temp_result['parser']:
+        return {'lexer': video_result['lexer'] and temp_result['lexer'], 'parser': True}
     idx = last_idx
 
-    if videoconferencia() and tempo():
-        return True
+    videoconferencia_result = videoconferencia()
+    temp_result = tempo()
+    if videoconferencia_result['parser'] and temp_result['parser']:
+        return {'lexer': videoconferencia_result['lexer'] and temp_result['lexer'], 'parser': True}
     idx = last_idx
-    return False
+    return {'lexer': False, 'parser': False, 'error': 'Erro na análise de Present'}
 
 
 def Interact():
@@ -273,16 +284,25 @@ def sequencia():
     return False
 
 
-def programa_SOL():
+def programa_SOL(code):
     global idx
+    global error_message
+    error_message = ""
+    idx = 0
     if idx >= len(token_list):
-        return False
+        return {'lexer': False, 'parser': False, 'error': "Fim inesperado do código"}
     token = token_list[idx]
     idx += 1
     if token == "loop":
-        print(idx, token_list)
-        return vezes() and sequencia()
-    return False
+        result = vezes()
+        if result['parser']:
+            result_seq = sequencia()
+            return {'parser': result_seq['parser'], 'error': result_seq['error']} if not result['lexer'] else result_seq
+        else:
+            return result
+    else:
+        return {'lexer': False, 'parser': False, 'error': f"Token inesperado na posição {idx}: '{token}'"}
+
 
 
 def main(code):

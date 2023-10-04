@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, make_response
-from tabela_de_token import main
+from tabela_de_token import lexan, programa_SOL
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -11,12 +11,15 @@ def analyze_code():
     code = data.get('code')
 
     # Chame a função main() do seu código Python com o código do cliente
-    result = main(code)
+    lexer_response = lexan(code)
+    parser_response = programa_SOL(code)
 
-    # Responder com a resposta da análise
+    # Organize a resposta para o cliente
     response_data = {
-        'message': result
+        'lexer': lexer_response,
+        'parser': parser_response
     }
+
     return jsonify(response_data)
 
 if __name__ == '__main__':
