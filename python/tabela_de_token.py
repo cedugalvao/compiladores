@@ -56,6 +56,7 @@ token_table = {
     '2_dias;': TOKEN_TEMPO_VAL,
     'sem_limite;': TOKEN_TEMPO_VAL,
     '15_min;': TOKEN_TEMPO_VAL,
+    '10_seg;': TOKEN_TEMPO_VAL,
     'navegar': TOKEN_NAVEGAR_BROWSER,
     'browser': TOKEN_BROWSER_NAVEGADOR,
     'visualizar_pdf': TOKEN_VISUALIZAR_PDF_BROWSER,
@@ -80,6 +81,7 @@ def lexan(code):
     global error_message
 
     token_list = code.split(' ')
+
     for idx, palavra in enumerate(token_list, start=1):
         token_type = token_table.get(palavra, 'TOKEN_DESCONHECIDO')
         if token_type == 'TOKEN_DESCONHECIDO':
@@ -151,12 +153,56 @@ def navegar():
     return browser()
 
 
+def close_browser():
+    import time
+    import selenium.webdriver as webdriver
+    tempo = token_list[idx - 1]
+    driver = webdriver.Chrome()
+    link = token_list[idx - 2]
+
+    if (link == "link_videoconferencia"):
+        link = "https://meet.google.com/"
+    elif (link == "link_video"):
+        link = "https://www.youtube.com/"
+    elif (link == "link_pdf"):
+        link = "https://drive.google.com/"
+    elif (link == "link_whatsapp_web"):
+        link = "https://web.whatsapp.com/"
+    elif (link == "link_email"):
+        link = "https://mail.google.com/"
+    else:
+        link = ""
+
+    driver.get(link)
+    
+    if (tempo == "sem_limite;"):
+        tempo = 999999999
+        return True
+    elif (tempo == "15_min;"):
+        tempo = 60 * 15
+    elif (tempo == "20_min;"):
+        tempo = 60 * 20
+    elif (tempo == "1_hora;"):
+        tempo = 60 * 60
+    elif (tempo == "1_dia;"):
+        tempo = 60 * 60 * 24
+    elif (tempo == "2_dias;"):
+        tempo = 60 * 60 * 24 * 2
+    elif (tempo == "10_seg;"):
+        tempo = 10
+    else:
+        tempo = 999999999
+
+    time.sleep(int(tempo))
+    driver.close()
+    return True
+
+
 def tempo():
     global idx
     if idx >= len(token_list):
         return False
     token = token_list[idx]
-    print(idx)
     idx += 1
     return token_table[token] == TOKEN_TEMPO_VAL
 
@@ -229,7 +275,6 @@ def Critique():
 
 def vezes():
     global idx
-    print(idx, token_list)
     if idx >= len(token_list):
         return False
     token = token_list[idx]
@@ -241,7 +286,6 @@ def fases_EPIC():
     global idx
     if idx >= len(token_list):
         return False
-    print(idx)
     last_idx = idx
     if Explore():
         return True
@@ -284,11 +328,13 @@ def programa_SOL():
     return False
 
 
-def main(code):
+def main(code, close):
     global error_message
     global idx
     error_message = ""
     idx = 0
+    if (close == "TRUE"):
+        return close_browser()
     if not lexan(code):
         return {'lexer': False, 'parser': False, 'error': error_message}
     elif programa_SOL():
