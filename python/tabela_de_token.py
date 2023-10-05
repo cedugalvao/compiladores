@@ -1,3 +1,5 @@
+import webbrowser
+
 # Defina os tipos de tokens como constantes
 TOKEN_PROGRAMA_SOL = 'PROGRAMA_SOL'
 TOKEN_LOOP = 'LOOP'
@@ -76,17 +78,36 @@ idx = 0
 error_message = ''
 
 
+def open_link(link):
+    try:
+        # Open the link in the default web browser
+        webbrowser.open(link, new=2)  # 'new=2' opens in a new tab if possible
+        return True
+    except Exception as e:
+        # Handle any errors that may occur
+        print(f"Error opening link: {e}")
+        return False
+    
+links_to_open = []
+
 def lexan(code):
     global token_list
     global error_message
 
     token_list = code.split(' ')
+    
+    # Limpe a lista de links antes de analisar o código
+    links_to_open.clear()
 
     for idx, palavra in enumerate(token_list, start=1):
         token_type = token_table.get(palavra, 'TOKEN_DESCONHECIDO')
         if token_type == 'TOKEN_DESCONHECIDO':
             error_message += f"'{palavra}' token invalido"
             return False
+        # Se a palavra for um link, adicione-a à lista de links
+        if token_type == TOKEN_LINK:
+            links_to_open.append(palavra)
+    
     return True
 
 
@@ -337,7 +358,11 @@ def main(code, close):
         return close_browser()
     if not lexan(code):
         return {'lexer': False, 'parser': False, 'error': error_message}
-    elif programa_SOL():
-        return {'lexer': True, 'parser': True}
-    else:
-        return {'lexer': True, 'parser': False}
+    
+    # Abra e feche todos os links na sequência
+    for link in links_to_open:
+        if not open_link(link):
+            return {'lexer': True, 'parser': False}  # Lidere com quaisquer erros ao abrir os links
+        close_browser()
+    
+    return {'lexer': True, 'parser': True}
