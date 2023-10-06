@@ -308,10 +308,12 @@ def fases_EPIC():
 def sequencia():
     global idx
     last_idx = idx
-    while fases_EPIC():
-        if idx >= len(token_list):
-            return True
+    if fases_EPIC():
+        return True
     idx = last_idx
+    if fases_EPIC() and sequencia():
+        return True
+
     return False
 
 
