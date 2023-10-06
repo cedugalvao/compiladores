@@ -10,5 +10,5 @@
 - Usando seu terminal, navegue até o diretório e instale as dependências: yarn install
 - No diretório de nome python instale as extensões de python flask e flaskcors
 - Tudo pronto para desenvolver, execute: yarn dev no terminal do diretório front_compiladores-feature-primeiraspaginas
-- E no diretório de nome python execute o arquivo api.py 
+- No diretório de nome python execute o arquivo api.py 
   
