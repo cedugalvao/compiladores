@@ -174,7 +174,6 @@ def close_browser():
         link = ""
 
     driver.get(link)
-    
     if (tempo == "sem_limite;"):
         tempo = 999999999
         return True
@@ -328,13 +327,12 @@ def programa_SOL():
     return False
 
 
-def main(code, close):
+def main(code):
     global error_message
     global idx
     error_message = ""
     idx = 0
-    if (close == "TRUE"):
-        return close_browser()
+
     if not lexan(code):
         return {'lexer': False, 'parser': False, 'error': error_message}
     elif programa_SOL():

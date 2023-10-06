@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify
 from tabela_de_token import main
 from flask_cors import CORS
 
@@ -10,8 +10,6 @@ CORS(app, resources={r"/analyze": {"origins": "http://localhost:3000"}})
 def analyze_code():
     data = request.get_json()
     code = data.get('code')
-
-    # Chame a função main() do seu código Python com o código do cliente
     result = main(code)
 
     # Responder com a resposta da análise
